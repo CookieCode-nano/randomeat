@@ -65,13 +65,13 @@
     <button onclick="playSound(); addMeal()">新增餐點</button>
     <ul id="mealOptions"></ul>
 
-    <audio id="clickSound" src="click.mp3"></audio>
+    <audio id="clickSound" src="BOTW-good.wav"></audio>
 
     <script>
         let meals = ["滷肉飯","火鍋", "三明治","牛排"];
 
         function playSound() {
-            const clickSound = document.getElementById("BOTW-good");
+            const clickSound = document.getElementById("clickSound");
             clickSound.play();
         }
 
