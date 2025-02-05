@@ -57,12 +57,12 @@
 <body>
     <h1>隨機餐點抽取</h1>
     <button onclick="playSound(); addRandomMeal()">吃，什麼???!</button>
-    <button onclick="playSound(); clearMeals()">清除結果</button>
+    <button onclick="clearMeals()">清除結果</button>
     <ul id="mealList"></ul>
 
     <h2>管理餐點後宮</h2>
     <input type="text" id="newMealInput" placeholder="新增餐點">
-    <button onclick="playSound(); addMeal()">新增餐點</button>
+    <button onclick="addMeal()">新增餐點</button>
     <ul id="mealOptions"></ul>
 
     <audio id="clickSound" src="doraitem.mp3"></audio>
@@ -115,7 +115,7 @@
                 mealItem.textContent = meal;
                 const deleteButton = document.createElement("button");
                 deleteButton.textContent = "刪除";
-                deleteButton.onclick = () => { playSound(); deleteMeal(index); };
+                deleteButton.onclick = () => { deleteMeal(index); };
                 mealItem.appendChild(deleteButton);
                 mealOptions.appendChild(mealItem);
             });
