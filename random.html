@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>又要吃什麼</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #fff;
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        li button {
+            background-color: #f44336;
+        }
+        li button:hover {
+            background-color: #e53935;
+        }
+    </style>
+</head>
+<body>
+    <h1>隨機餐點抽取</h1>
+    <button onclick="addRandomMeal()">吃，什麼???!</button>
+    <button onclick="clearMeals()">清除結果</button>
+    <ul id="mealList"></ul>
+
+    <h2>管理餐點後宮</h2>
+    <input type="text" id="newMealInput" placeholder="新增餐點">
+    <button onclick="addMeal()">新增餐點</button>
+    <ul id="mealOptions"></ul>
+
+    <script>
+        let meals = ["滷肉飯","火鍋", "三明治","牛排"];
+
+        function addRandomMeal() {
+            if (meals.length === 0) {
+                alert("沒選項是要吃空氣嗎?");
+                return;
+            }
+            const randomMeal = meals[Math.floor(Math.random() * meals.length)];
+            const mealList = document.getElementById("mealList");
+            const newMeal = document.createElement("li");
+            newMeal.textContent = randomMeal;
+            mealList.appendChild(newMeal);
+        }
+
+        function clearMeals() {
+            const mealList = document.getElementById("mealList");
+            mealList.innerHTML = '';
+        }
+
+        function addMeal() {
+            const newMealInput = document.getElementById("newMealInput");
+            const newMeal = newMealInput.value.trim();
+            if (newMeal) {
+                meals.push(newMeal);
+                updateMealOptions();
+                newMealInput.value = '';
+            }
+        }
+
+        function deleteMeal(index) {
+            meals.splice(index, 1);
+            updateMealOptions();
+        }
+
+        function updateMealOptions() {
+            const mealOptions = document.getElementById("mealOptions");
+            mealOptions.innerHTML = '';
+            meals.forEach((meal, index) => {
+                const mealItem = document.createElement("li");
+                mealItem.textContent = meal;
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "刪除";
+                deleteButton.onclick = () => deleteMeal(index);
+                mealItem.appendChild(deleteButton);
+                mealOptions.appendChild(mealItem);
+            });
+        }
+
+        // 初始化餐點選項列表
+        updateMealOptions();
+    </script>
+</body>
+</html>
