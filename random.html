@@ -1,168 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>又要吃什麼</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 20px;
-        }
-        h1, h2 {
-            color: #333;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 5px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        input[type="text"] {
-            padding: 10px;
-            margin: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            background-color: #fff;
-            margin: 5px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        li button {
-            background-color: #f44336;
-        }
-        li button:hover {
-            background-color: #e53935;
-        }
-        #codeOutput, #codeInput {
-            white-space: pre-wrap;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 20px;
+      }
+      h1,
+      h2 {
+        color: #333;
+      }
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      input[type="text"] {
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        background-color: #fff;
+        margin: 5px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      li button {
+        background-color: #f44336;
+      }
+      li button:hover {
+        background-color: #e53935;
+      }
+      #codeOutput,
+      #codeInput {
+        white-space: pre-wrap;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>隨機餐點抽取</h1>
     <button onclick="playSound(); addRandomMeal()">吃，什麼???!</button>
     <button onclick="clearMeals()">清除結果</button>
     <ul id="mealList"></ul>
 
     <h2>管理餐點後宮</h2>
-    <input type="text" id="newMealInput" placeholder="新增餐點">
+    <input type="text" id="newMealInput" placeholder="新增餐點" />
     <button onclick="addMeal()">新增餐點</button>
-    <button onclick="generateCode()">產出代碼</button>
     <ul id="mealOptions"></ul>
 
     <audio id="clickSound" src="doraitem.mp3"></audio>
 
     <div id="codeOutput"></div>
+    <button onclick="generateCode()">產出代碼</button>
+    <button onclick="copyCode()">複製代碼</button>
+    <h2>匯入餐點清單</h2>
 
-    <h2>更換餐點清單</h2>
     <textarea id="codeInput" placeholder="輸入代碼來更換餐點清單"></textarea>
     <button onclick="applyCode()">應用代碼</button>
 
     <script>
-        let meals = ["滷肉飯","火鍋", "三明治","牛排"];
+      let meals = ["滷肉飯", "火鍋", "三明治", "牛排"];
 
-        function playSound() {
-            const clickSound = document.getElementById("clickSound");
-            clickSound.currentTime = 0; // 重置音效播放時間
-            //調整音量
-            clickSound.volume = 0.2;
-            clickSound.play();
+      function playSound() {
+        const clickSound = document.getElementById("clickSound");
+        clickSound.currentTime = 0; // 重置音效播放時間
+        //調整音量
+        clickSound.volume = 0.2;
+        clickSound.play();
+      }
+
+      function addRandomMeal() {
+        if (meals.length === 0) {
+          alert("沒選項是要吃空氣嗎?");
+          return;
         }
+        const randomMeal = meals[Math.floor(Math.random() * meals.length)];
+        const mealList = document.getElementById("mealList");
+        const newMeal = document.createElement("li");
+        newMeal.textContent = randomMeal;
+        mealList.appendChild(newMeal);
+      }
 
-        function addRandomMeal() {
-            if (meals.length === 0) {
-                alert("沒選項是要吃空氣嗎?");
-                return;
-            }
-            const randomMeal = meals[Math.floor(Math.random() * meals.length)];
-            const mealList = document.getElementById("mealList");
-            const newMeal = document.createElement("li");
-            newMeal.textContent = randomMeal;
-            mealList.appendChild(newMeal);
+      function clearMeals() {
+        const mealList = document.getElementById("mealList");
+        mealList.innerHTML = "";
+      }
+
+      function addMeal() {
+        const newMealInput = document.getElementById("newMealInput");
+        const newMeal = newMealInput.value.trim();
+        if (newMeal) {
+          meals.push(newMeal);
+          updateMealOptions();
+          newMealInput.value = "";
         }
+      }
 
-        function clearMeals() {
-            const mealList = document.getElementById("mealList");
-            mealList.innerHTML = '';
-        }
-
-        function addMeal() {
-            const newMealInput = document.getElementById("newMealInput");
-            const newMeal = newMealInput.value.trim();
-            if (newMeal) {
-                meals.push(newMeal);
-                updateMealOptions();
-                newMealInput.value = '';
-            }
-        }
-
-        function deleteMeal(index) {
-            meals.splice(index, 1);
-            updateMealOptions();
-        }
-
-        function updateMealOptions() {
-            const mealOptions = document.getElementById("mealOptions");
-            mealOptions.innerHTML = '';
-            meals.forEach((meal, index) => {
-                const mealItem = document.createElement("li");
-                mealItem.textContent = meal;
-                const deleteButton = document.createElement("button");
-                deleteButton.textContent = "刪除";
-                deleteButton.onclick = () => deleteMeal(index);
-                mealItem.appendChild(deleteButton);
-                mealOptions.appendChild(mealItem);
-            });
-        }
-
-        function generateCode() {
-            const codeOutput = document.getElementById("codeOutput");
-            const codeString = JSON.stringify(meals);
-            codeOutput.textContent = `meals = ${codeString};`;
-        }
-
-        function applyCode() {
-            const codeInput = document.getElementById("codeInput").value;
-            try {
-                const newMeals = eval(codeInput);
-                if (Array.isArray(newMeals)) {
-                    meals = newMeals;
-                    updateMealOptions();
-                    alert("餐點清單已更新");
-                } else {
-                    throw new Error("代碼格式錯誤");
-                }
-            } catch (e) {
-                alert("代碼錯誤，請檢查後再試");
-            }
-        }
-
-        // 初始化餐點選項列表
+      function deleteMeal(index) {
+        meals.splice(index, 1);
         updateMealOptions();
+      }
+
+      function updateMealOptions() {
+        const mealOptions = document.getElementById("mealOptions");
+        mealOptions.innerHTML = "";
+        meals.forEach((meal, index) => {
+          const mealItem = document.createElement("li");
+          mealItem.textContent = meal;
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "刪除";
+          deleteButton.onclick = () => deleteMeal(index);
+          mealItem.appendChild(deleteButton);
+          mealOptions.appendChild(mealItem);
+        });
+      }
+
+      function generateCode() {
+        const codeOutput = document.getElementById("codeOutput");
+        const codeString = btoa(encodeURIComponent(JSON.stringify(meals)));
+        codeOutput.textContent = codeString;
+      }
+
+      function copyCode() {
+        const codeOutput = document.getElementById("codeOutput");
+        if (codeOutput.textContent) {
+          navigator.clipboard
+            .writeText(codeOutput.textContent)
+            .then(() => alert("代碼已複製到剪貼簿"))
+            .catch(() => alert("複製失敗，請手動複製"));
+        } else {
+          alert("請先點擊「產出代碼」按鈕");
+        }
+      }
+
+      function applyCode() {
+        const codeInput = document.getElementById("codeInput").value;
+        try {
+          const decodedString = decodeURIComponent(atob(codeInput));
+          const newMeals = JSON.parse(decodedString);
+          if (Array.isArray(newMeals)) {
+            meals = newMeals;
+            updateMealOptions();
+            alert("餐點清單已更新");
+          } else {
+            throw new Error("代碼格式錯誤");
+          }
+        } catch (e) {
+          alert("代碼錯誤，請檢查後再試");
+        }
+      }
+
+      // 初始化餐點選項列表
+      updateMealOptions();
     </script>
-</body>
+  </body>
 </html>
