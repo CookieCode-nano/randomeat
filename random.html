@@ -106,8 +106,7 @@
         word-break: break-all;
       }
       #codeInput {
-        min-height: 100px;
-        resize: vertical;
+        resize: none;
       }
       .notification {
         position: fixed;
@@ -148,10 +147,22 @@
       }
       .input-group {
         display: flex;
-        gap: 10px;
+        flex-direction: column;
         align-items: center;
-        justify-content: center;
+        gap: 10px;
         margin-bottom: 20px;
+      }
+      .input-group input {
+        width: 300px;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 1.1em;
+      }
+      .button-row {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
       }
       .meal-list {
         max-height: 400px;
@@ -176,6 +187,39 @@
         background-color: #bdc3c7;
         cursor: not-allowed;
       }
+      .code-section {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-sizing: border-box;
+      }
+      .code-group {
+        margin-bottom: 20px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .code-box {
+        width: 100%;
+        height: 120px;
+        padding: 15px;
+        margin-bottom: 10px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        background-color: white;
+        font-family: "Consolas", "Monaco", monospace;
+        font-size: 14px;
+        line-height: 1.5;
+        resize: none;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        word-break: break-all;
+        box-sizing: border-box;
+      }
+      #codeOutput {
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
     </style>
   </head>
   <body>
@@ -193,8 +237,13 @@
 
       <h2>管理餐點後宮</h2>
       <div class="input-group">
-        <input type="text" id="newMealInput" placeholder="新增餐點" />
-        <button onclick="addMeal()">新增餐點</button>
+        <input type="text" id="newMealInput" placeholder="餐點名稱" />
+        <div class="button-row">
+          <button onclick="addMeal()">新增餐點</button>
+          <button onclick="clearAllMeals()" style="background-color: #e74c3c">
+            全部移除
+          </button>
+        </div>
       </div>
 
       <div class="pagination">
@@ -206,15 +255,25 @@
 
       <audio id="clickSound" src="doraitem.mp3"></audio>
 
-      <h2>匯出/入餐點清單</h2>
-      <div id="codeOutput"></div>
-      <div class="button-group">
-        <button onclick="generateCode()">產出代碼</button>
-        <button onclick="copyCode()">複製代碼</button>
-      </div>
-      <textarea id="codeInput" placeholder="輸入代碼來匯入餐點清單"></textarea>
-      <div class="button-group">
-        <button onclick="applyCode()">匯入代碼</button>
+      <div class="code-section">
+        <h2>匯出/匯入餐點清單</h2>
+        <div class="code-group">
+          <div id="codeOutput" class="code-box"></div>
+          <div class="button-group">
+            <button onclick="generateCode()">產出代碼</button>
+            <button onclick="copyCode()">複製代碼</button>
+          </div>
+        </div>
+        <div class="code-group">
+          <textarea
+            id="codeInput"
+            class="code-box"
+            placeholder="輸入代碼來更換餐點清單"
+          ></textarea>
+          <div class="button-group">
+            <button onclick="applyCode()">應用代碼</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -403,6 +462,19 @@
         const mealList = document.getElementById("mealList");
         mealList.innerHTML = "";
         showNotification("已清除抽出結果");
+      }
+
+      function clearAllMeals() {
+        if (meals.length === 0) {
+          showNotification("後宮已空");
+          return;
+        }
+        if (confirm("確定要將所有餐點逐出後宮嗎？")) {
+          meals = [];
+          currentPage = 1;
+          updateMealOptions();
+          showNotification("所有餐點已被逐出後宮");
+        }
       }
 
       // 初始化餐點選項列表
