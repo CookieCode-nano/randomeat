@@ -263,7 +263,7 @@
         const totalPages = Math.ceil(meals.length / itemsPerPage);
         document.getElementById(
           "pageInfo"
-        ).textContent = `第 ${currentPage} 頁`;
+        ).textContent = `第 ${currentPage} 頁 / 共 ${totalPages} 頁`;
         document.getElementById("prevPage").disabled = currentPage === 1;
         document.getElementById("nextPage").disabled =
           currentPage === totalPages || totalPages === 0;
@@ -288,24 +288,15 @@
         const mealOptions = document.getElementById("mealOptions");
         mealOptions.innerHTML = "";
 
-        // 計算每個餐點的出現次數
-        const mealCounts = {};
-        meals.forEach((meal) => {
-          mealCounts[meal] = (mealCounts[meal] || 0) + 1;
-        });
-
-        // 使用 Set 來獲取唯一的餐點列表
-        const uniqueMeals = [...new Set(meals)];
-
         // 計算當前頁的起始和結束索引
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
-        const currentPageMeals = uniqueMeals.slice(startIndex, endIndex);
+        const currentPageMeals = meals.slice(startIndex, endIndex);
 
-        currentPageMeals.forEach((meal) => {
+        currentPageMeals.forEach((meal, index) => {
           const mealItem = document.createElement("li");
-          const count = mealCounts[meal];
-          mealItem.textContent = count > 1 ? `${meal} x${count}` : meal;
+          const itemNumber = startIndex + index + 1;
+          mealItem.textContent = `${itemNumber}. ${meal}`;
 
           const deleteButton = document.createElement("button");
           deleteButton.textContent = "刪除";
@@ -390,6 +381,28 @@
         } catch (e) {
           showNotification("代碼錯誤，請檢查後再試");
         }
+      }
+
+      function addRandomMeal() {
+        if (meals.length === 0) {
+          showNotification("沒選項是要吃空氣嗎?");
+          return;
+        }
+        const randomMeal = meals[Math.floor(Math.random() * meals.length)];
+        const mealList = document.getElementById("mealList");
+
+        const newMeal = document.createElement("li");
+        newMeal.textContent = randomMeal;
+        mealList.appendChild(newMeal);
+
+        // 顯示抽到餐點的通知
+        showMealNotification(randomMeal);
+      }
+
+      function clearMeals() {
+        const mealList = document.getElementById("mealList");
+        mealList.innerHTML = "";
+        showNotification("已清除抽出結果");
       }
 
       // 初始化餐點選項列表
